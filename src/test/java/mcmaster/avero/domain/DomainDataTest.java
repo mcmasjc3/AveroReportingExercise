@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import mcmaster.avero.guice.AveroModule;
 import mcmaster.avero.posfetch.data.Business;
+import mcmaster.avero.posfetch.data.Employee;
 import mcmaster.avero.posfetch.data.OrderedItem;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -16,6 +17,9 @@ import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
+/**
+ * Tests for {@link DomainData}
+ */
 public class DomainDataTest {
 
   private static final String BUSINESS_ID1 = "business1";
@@ -130,5 +134,21 @@ public class DomainDataTest {
     DomainData domainData = new DomainData(BUSINESSES, null, null, null, null, orderedItems);
     List<OrderedItem> result = domainData.getOrderedItems(BUSINESS_ID1, reportInterval);
     assertThat(result).containsExactly(goodItem1, goodItem2WithUpdatedOutsideRange);
+  }
+
+  @Test
+  public void testGetEmployeeNames() {
+    Employee goodEmployee1 = new Employee("1", BUSINESS_ID1, "Moses", "Horwitz", 0, "2018", "2018");
+    Employee goodEmployee2 =
+        new Employee("2", BUSINESS_ID1, "Louis", "Feinberg", 0, "2018", "2018");
+    Employee otherBusinessEmployee =
+        new Employee("3", BUSINESS_ID2, "Jerome", "Horwitz", 0, "2018", "2018");
+    Map<String, Employee> employees =
+        ImmutableMap.of("1", goodEmployee1, "2", goodEmployee2, "3", otherBusinessEmployee);
+    DomainData domainData = new DomainData(BUSINESSES, null, employees, null, null, null);
+    Map<String, String> employeeNames = domainData.getEmployeeNames(BUSINESS_ID1);
+    assertThat(employeeNames.size()).isEqualTo(2);
+    assertThat(employeeNames.get("1")).isEqualTo("Moses Horwitz");
+    assertThat(employeeNames.get("2")).isEqualTo("Louis Feinberg");
   }
 }

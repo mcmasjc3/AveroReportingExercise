@@ -14,6 +14,9 @@ import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
+/**
+ * Tests for {@link BusinessDataFetcher}
+ */
 public class BusinessDataFetcherTest {
   @Test
   public void testSendRequest() {

@@ -14,6 +14,9 @@ import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
+/**
+ * Tests for {@link OrderedItemDataFetcher}
+ */
 public class OrderedItemFetcherTest {
   @Test
   public void testSendRequest() {

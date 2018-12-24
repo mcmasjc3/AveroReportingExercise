@@ -16,6 +16,9 @@ import java.util.Map;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
+/**
+ * Tests for {@link FoodCostPercentageReport}
+ */
 public class FoodCostPercentageReportTest {
 
   private static final String BUSINESS_ID = "business1";

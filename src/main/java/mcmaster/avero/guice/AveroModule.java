@@ -19,6 +19,9 @@ import mcmaster.avero.posfetch.data.OrderedItem;
 
 import java.util.Map;
 
+/**
+ * Guice module for Avero reporting server.
+ */
 public class AveroModule extends AbstractModule {
 
   @Override

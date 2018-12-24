@@ -7,6 +7,9 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Data fetcher that translates JSON into {@link OrderedItem} domain classes.
+ */
 public class OrderedItemDataFetcher extends AbstractDataFetcher<OrderedItem> {
   private static final String REQUEST = "/orderedItems";
 

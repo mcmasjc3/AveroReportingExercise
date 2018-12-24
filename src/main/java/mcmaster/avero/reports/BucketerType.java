@@ -1,5 +1,8 @@
 package mcmaster.avero.reports;
 
+/**
+ * Enum representing the possible bucketer time intervals.
+ */
 public enum BucketerType {
   HOUR,
   DAY,

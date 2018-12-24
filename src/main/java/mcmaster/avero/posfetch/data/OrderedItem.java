@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-public class OrderedItem implements GenericItem {
-  private final String id;
+/**
+ * Domain class representing a single ordered item. Created from JSON in production.
+ */
+public class OrderedItem extends AbstractItem {
   private final String businessId;
   private final String employeeId;
   private final String checkId;
@@ -17,8 +19,30 @@ public class OrderedItem implements GenericItem {
   private final DateTime updatedAt;
   private final DateTime createdAt;
 
-  public String getId() {
-    return id;
+  @JsonCreator
+  public OrderedItem(
+      @JsonProperty("id") String id,
+      @JsonProperty("business_id") String businessId,
+      @JsonProperty("employee_id") String employeeId,
+      @JsonProperty("check_id") String checkId,
+      @JsonProperty("item_id") String itemId,
+      @JsonProperty("name") String name,
+      @JsonProperty("cost") int cost,
+      @JsonProperty("price") int price,
+      @JsonProperty("voided") boolean voided,
+      @JsonProperty("updated_at") String updatedAt,
+      @JsonProperty("created_at") String createdAt) {
+    super(id);
+    this.businessId = businessId;
+    this.employeeId = employeeId;
+    this.checkId = checkId;
+    this.itemId = itemId;
+    this.name = name;
+    this.cost = cost;
+    this.price = price;
+    this.voided = voided;
+    this.updatedAt = DateTime.parse(updatedAt);
+    this.createdAt = DateTime.parse(createdAt);
   }
 
   public String getBusinessId() {
@@ -59,31 +83,5 @@ public class OrderedItem implements GenericItem {
 
   public DateTime getCreatedAt() {
     return createdAt;
-  }
-
-  @JsonCreator
-  public OrderedItem(
-      @JsonProperty("id") String id,
-      @JsonProperty("business_id") String businessId,
-      @JsonProperty("employee_id") String employeeId,
-      @JsonProperty("check_id") String checkId,
-      @JsonProperty("item_id") String itemId,
-      @JsonProperty("name") String name,
-      @JsonProperty("cost") int cost,
-      @JsonProperty("price") int price,
-      @JsonProperty("voided") boolean voided,
-      @JsonProperty("updated_at") String updatedAt,
-      @JsonProperty("created_at") String createdAt) {
-    this.id = id;
-    this.businessId = businessId;
-    this.employeeId = employeeId;
-    this.checkId = checkId;
-    this.itemId = itemId;
-    this.name = name;
-    this.cost = cost;
-    this.price = price;
-    this.voided = voided;
-    this.updatedAt = DateTime.parse(updatedAt);
-    this.createdAt = DateTime.parse(createdAt);
   }
 }

@@ -14,13 +14,15 @@ import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
+/**
+ * Tests for {@link EmployeeDataFetcher}
+ */
 public class EmployeeDataFetcherTest {
   @Test
   public void testSendRequest() {
     int count = 1;
     String id = "1234";
     String businessId = "2345";
-    String employeeId = "3456";
     String firstName = "first";
     String lastName = "last";
     int payRate = 17;
@@ -33,8 +35,6 @@ public class EmployeeDataFetcherTest {
             + id
             + "\",\"business_id\":\""
             + businessId
-            + "\",\"employee_id\":\""
-            + employeeId
             + "\",\"first_name\":\""
             + firstName
             + "\",\"last_name\":\""
@@ -70,7 +70,6 @@ public class EmployeeDataFetcherTest {
     assertThat(employee).isNotNull();
     assertThat(employee.getId()).isEqualTo(id);
     assertThat(employee.getBusinessId()).isEqualTo(businessId);
-    assertThat(employee.getEmployeeId()).isEqualTo(employeeId);
     assertThat(employee.getFirstName()).isEqualTo(firstName);
     assertThat(employee.getLastName()).isEqualTo(lastName);
     assertThat(employee.getPayRate()).isEqualTo(payRate);

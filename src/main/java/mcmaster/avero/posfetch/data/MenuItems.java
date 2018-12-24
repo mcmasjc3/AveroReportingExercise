@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+/**
+ * Domain class representing a batch of menu items fetched from the POS system. Created from JSON in
+ * production.
+ */
 public class MenuItems {
   private final int count;
   private final List<MenuItem> menuItems;

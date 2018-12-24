@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-public class MenuItem implements GenericItem {
-  private final String id;
+/**
+ * Domain class representing a single menu item. Created from JSON in production.
+ */
+public class MenuItem extends AbstractItem {
   private final String businessId;
   private final String name;
   private final int cost;
@@ -22,17 +24,13 @@ public class MenuItem implements GenericItem {
       @JsonProperty("price") int price,
       @JsonProperty("updated_at") String updatedAt,
       @JsonProperty("created_at") String createdAt) {
-    this.id = id;
+    super(id);
     this.businessId = businessId;
     this.name = name;
     this.cost = cost;
     this.price = price;
     this.updatedAt = DateTime.parse(updatedAt);
     this.createdAt = DateTime.parse(createdAt);
-  }
-
-  public String getId() {
-    return id;
   }
 
   public String getBusinessId() {

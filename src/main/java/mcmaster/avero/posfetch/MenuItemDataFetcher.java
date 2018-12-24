@@ -8,6 +8,9 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Data fetcher that translates JSON into {@link MenuItem} domain classes.
+ */
 public class MenuItemDataFetcher extends AbstractDataFetcher<MenuItem> {
   private static final String REQUEST = "/menuItems";
 

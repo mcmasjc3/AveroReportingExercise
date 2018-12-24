@@ -7,6 +7,9 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Data fetcher that translates JSON into {@link Business} domain classes.
+ */
 public class BusinessDataFetcher extends AbstractDataFetcher<Business> {
   private static final String REQUEST = "/businesses";
 

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-public class LaborEntry implements GenericItem {
-  private final String id;
+/**
+ * Domain class representing a single labor entry. Created from JSON in production.
+ */
+public class LaborEntry extends AbstractItem {
   private final String businessId;
   private final String employeeId;
   private final String name;
@@ -26,7 +28,7 @@ public class LaborEntry implements GenericItem {
       @JsonProperty("pay_rate") int payRate,
       @JsonProperty("updated_at") String updatedAt,
       @JsonProperty("created_at") String createdAt) {
-    this.id = id;
+    super(id);
     this.businessId = businessId;
     this.employeeId = employeeId;
     this.name = name;
@@ -35,10 +37,6 @@ public class LaborEntry implements GenericItem {
     this.payRate = payRate;
     this.updatedAt = DateTime.parse(updatedAt);
     this.createdAt = DateTime.parse(createdAt);
-  }
-
-  public String getId() {
-    return id;
   }
 
   public String getBusinessId() {

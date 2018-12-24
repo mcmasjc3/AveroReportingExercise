@@ -5,6 +5,8 @@ import com.google.api.client.util.Key;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import mcmaster.avero.domain.DomainData;
+import mcmaster.avero.posfetch.data.Business;
+import mcmaster.avero.posfetch.data.OrderedItem;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
@@ -13,8 +15,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Generates a food cost percentage report.
+ */
 class FoodCostPercentageReport
-    extends AbstractReport<FoodCostPercentageReport.Report, FoodCostPercentageReport.Data> {
+    extends AbstractReportGenerator<
+    FoodCostPercentageReport.Report, FoodCostPercentageReport.Data> {
   static final String REPORT_TYPE = "FCP";
 
   @Inject
@@ -22,11 +28,24 @@ class FoodCostPercentageReport
     super(domainData, REPORT_TYPE);
   }
 
+  /**
+   * Returns the report for the percentage of food costs in total sales for the requested {@link
+   * Business} and {@link Interval}.
+   */
   @Override
   Report createReport(String businessId, String timeFrame, List<Data> data) {
     return new Report(businessId, timeFrame, data);
   }
 
+  /**
+   * Returns Data items for the report.
+   *
+   * <p>We create {@link Bucketer Bucketers} for costs and prices for all {@link OrderedItem
+   * OrderedItems} for the given {@link Business} and {@link Interval}.
+   *
+   * <p>Once we have those, we run through the {@link Bucketer.Bucket Buckets} and do the division,
+   * creating a {@link Data} for each bucket.
+   */
   List<Data> generateData(String businessId, Interval reportInterval, BucketerType bucketerType) {
     ImmutableList.Builder<Data> result = ImmutableList.builder();
     ImmutableMap<DateTime, Bucketer.Bucket<Integer>> costs =
@@ -34,17 +53,18 @@ class FoodCostPercentageReport
     Bucketer<Integer> sales = bucketSales(businessId, reportInterval, bucketerType);
     for (Bucketer.Bucket<Integer> salesBucket : sales.getBuckets().values()) {
       BigDecimal totalSales =
-          new BigDecimal(salesBucket.values.stream().collect((Collectors.summingInt((s) -> s))));
+          new BigDecimal(
+              salesBucket.getValues().stream().collect((Collectors.summingInt((s) -> s))));
       BigDecimal totalCosts =
           new BigDecimal(
               costs
-                  .get(salesBucket.start)
-                  .values
+                  .get(salesBucket.getStart())
+                  .getValues()
                   .stream()
                   .collect((Collectors.summingInt((s) -> s))));
       result.add(
           new Data(
-              new TimeFrame(salesBucket.start.toString(), salesBucket.end.toString()),
+              new TimeFrame(salesBucket.getStart().toString(), salesBucket.getEnd().toString()),
               totalCosts
                   .divide(totalSales, 3, BigDecimal.ROUND_HALF_UP)
                   .multiply(new BigDecimal(100))
@@ -53,18 +73,26 @@ class FoodCostPercentageReport
     return result.build();
   }
 
+  /**
+   * Create a {@link Bucketer} for the given {@link BucketerType} and add the price for each {@link
+   * OrderedItem}.
+   */
   private Bucketer<Integer> bucketSales(
       String businessId, Interval reportInterval, BucketerType bucketerType) {
-    Bucketer<Integer> bucketer = new Bucketer<>(bucketerType);
+    Bucketer<Integer> bucketer = Bucketer.create(bucketerType);
     domainData
         .getOrderedItems(businessId, reportInterval)
         .forEach((o) -> bucketer.add(o.getCreatedAt(), o.getPrice()));
     return bucketer;
   }
 
+  /**
+   * Create a {@link Bucketer} for the given {@link BucketerType} and add the cost for each {@link
+   * OrderedItem}.
+   */
   private Bucketer<Integer> bucketCosts(
       String businessId, Interval reportInterval, BucketerType bucketerType) {
-    Bucketer<Integer> bucketer = new Bucketer<>(bucketerType);
+    Bucketer<Integer> bucketer = Bucketer.create(bucketerType);
     domainData
         .getOrderedItems(businessId, reportInterval)
         .forEach((o) -> bucketer.add(o.getCreatedAt(), o.getCost()));
@@ -73,11 +101,11 @@ class FoodCostPercentageReport
 
   static class Report {
     @Key
-    private String report;
+    private final String report;
     @Key
-    private String timeInterval;
+    private final String timeInterval;
     @Key
-    private List<Data> data;
+    private final List<Data> data;
 
     Report(
         @JsonProperty("report") String report,
@@ -103,12 +131,11 @@ class FoodCostPercentageReport
 
   static class Data {
     @Key
-    private TimeFrame timeFrame;
+    private final TimeFrame timeFrame;
     @Key
-    private BigDecimal value;
+    private final BigDecimal value;
 
-    Data(
-        @JsonProperty("timeFrame") TimeFrame timeFrame, @JsonProperty("value") BigDecimal value) {
+    Data(@JsonProperty("timeFrame") TimeFrame timeFrame, @JsonProperty("value") BigDecimal value) {
       this.timeFrame = timeFrame;
       this.value = value;
     }
@@ -124,9 +151,9 @@ class FoodCostPercentageReport
 
   static class TimeFrame {
     @Key
-    private String start;
+    private final String start;
     @Key
-    private String end;
+    private final String end;
 
     TimeFrame(@JsonProperty("start") String start, @JsonProperty("end") String end) {
       this.start = start;

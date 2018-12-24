@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-public class Check implements GenericItem {
-  private final String id;
+/**
+ * Domain class representing a single check. Created from JSON in production.
+ */
+public class Check extends AbstractItem {
   private final String businessId;
   private final String employeeId;
   private final String name;
@@ -24,7 +26,7 @@ public class Check implements GenericItem {
       @JsonProperty("closed_at") String closedAt,
       @JsonProperty("updated_at") String updatedAt,
       @JsonProperty("created_at") String createdAt) {
-    this.id = id;
+    super(id);
     this.businessId = businessId;
     this.employeeId = employeeId;
     this.name = name;
@@ -32,10 +34,6 @@ public class Check implements GenericItem {
     this.closedAt = DateTime.parse(closedAt);
     this.updatedAt = DateTime.parse(updatedAt);
     this.createdAt = DateTime.parse(createdAt);
-  }
-
-  public String getId() {
-    return id;
   }
 
   public String getBusinessId() {

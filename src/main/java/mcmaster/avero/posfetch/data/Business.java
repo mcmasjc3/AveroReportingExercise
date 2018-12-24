@@ -6,8 +6,10 @@ import org.joda.time.DateTime;
 
 import java.util.List;
 
-public class Business implements GenericItem {
-  private final String id;
+/**
+ * Domain class representing a single business. Created from JSON in production.
+ */
+public class Business extends AbstractItem {
   private final String name;
   private final List<Integer> hours;
   private final DateTime updatedAt;
@@ -20,15 +22,11 @@ public class Business implements GenericItem {
       @JsonProperty("hours") List<Integer> hours,
       @JsonProperty("updated_at") String updatedAt,
       @JsonProperty("created_at") String createdAt) {
-    this.id = id;
+    super(id);
     this.name = name;
     this.hours = hours;
     this.updatedAt = DateTime.parse(updatedAt);
     this.createdAt = DateTime.parse(createdAt);
-  }
-
-  public String getId() {
-    return id;
   }
 
   public String getName() {
@@ -46,5 +44,4 @@ public class Business implements GenericItem {
   public DateTime getCreatedAt() {
     return createdAt;
   }
-
 }
