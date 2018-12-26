@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Data fetcher that translates JSON into {@link Check} domain classes.
  */
-public class CheckDataFetcher extends AbstractDataFetcher<Check> {
+public class CheckDataFetcher extends DataFetcher<Check> {
   private static final String REQUEST = "/checks";
 
   @Inject

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Data fetcher that translates JSON into {@link Employee} domain classes.
  */
-public class EmployeeDataFetcher extends AbstractDataFetcher<Employee> {
+public class EmployeeDataFetcher extends DataFetcher<Employee> {
   private static final String REQUEST = "/employees";
 
   @Inject

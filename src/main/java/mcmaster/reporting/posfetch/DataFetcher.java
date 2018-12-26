@@ -16,14 +16,14 @@ import java.util.Map;
  *
  * @param <I> type of item to be fetched.
  */
-abstract class AbstractDataFetcher<I extends AbstractItem> {
+abstract class DataFetcher<I extends AbstractItem> {
   static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   private static final String BASE_URL = "https://secret-lake-26389.herokuapp.com";
   private static final int MAX_LIMIT = 500;
   private final RequestHandler requestHandler;
   private final FetchUrl url;
 
-  AbstractDataFetcher(RequestHandler requestHandler, String request) {
+  DataFetcher(RequestHandler requestHandler, String request) {
     this.requestHandler = requestHandler;
     this.url = new FetchUrl(request);
   }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Data fetcher that translates JSON into {@link MenuItem} domain classes.
  */
-public class MenuItemDataFetcher extends AbstractDataFetcher<MenuItem> {
+public class MenuItemDataFetcher extends DataFetcher<MenuItem> {
   private static final String REQUEST = "/menuItems";
 
   @Inject
