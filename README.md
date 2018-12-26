@@ -22,3 +22,12 @@ Contains the ReportServer implementation and the Guice Module that binds classes
 1. When bucketing labor entries for the LCP report, I treat all portions of an hour as if it were a whole hour.  Buckets are created for the portion of the shift that overlaps the time span for the report.  For example, if a shift runs from 09:45 to 17:30 and the report spans 14:30 to 20:00, we bucket the entire pay rate at 14:00, 15:00,  16:00 and 17:00.  I could be more accurate if I allocated a fraction of the pay rate when a fraction of an hour overlaps, but I chose not to add that complication.
 
 ## Instructions for running the ReportServer
+1. Go to the directory where you want to put the code.
+1. **git clone https://github.com/mcmasjc3/AveroReportingExercise**
+1. **cd AveroReportingExercise**
+1. **mvn package**
+1. **java -jar target\AveroCodingExercise-1.0-SNAPSHOT-jar-with-dependencies.jar** _port_
+
+This starts the server, listening for HTTP requests on the specified port.  The port argument is optional and defaults to 8080.  The server reads all the DomainData from the POS API, so it takes some time to initialize.  Once it does, it prints "ReportServer started on port <port>" and is ready for requests.
+
+To shut down shutdown the server, send a "/quitquitquit" request, or just CTRL-C from the command line.
